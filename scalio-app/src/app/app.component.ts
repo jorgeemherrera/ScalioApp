@@ -1,45 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AccountService } from './services/account-service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'scalio-app';
+  p: number = 1;
   search;
   users: [];
-  errorMessage;
+  account;
+  alertMessage: boolean;
   loading: boolean = false;
 
-  constructor(
-    private accountService: AccountService,
-    private formBuilder: FormBuilder,
-  ) { }
-
-  ngOnInit() {
+  constructor(private accountService: AccountService) { }
+  
+  onKeyBackspace(event) {
+    console.log(event);
+    if (event.isTrusted) {
+      this.alertMessage = false;
+      console.log('this.alertMessage', this.alertMessage)
+    }
   }
-
-
   getLoginAccount() {
-    this.errorMessage = "";
-    this.accountService.getAccount(this.search)
-      .subscribe(
-        (response) => {
-          console.log('response received')
-          this.users = response.items;
-          console.log('this.users', this.users)
-        },
-        (error) => {
-          console.error('Request failed with error')
-          this.errorMessage = error;
-          this.loading = false;
-        },
-        () => {
-          console.error('Request completed')
-          this.loading = false;
-        })
+    this.accountService.getAccount(this.search).subscribe(data => {
+      this.account = data;
+      this.users = data.items;
+    })
   }
 }

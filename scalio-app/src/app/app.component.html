@@ -1,31 +1,29 @@
-<div *ngIf="loading">loading...</div>
+<div class="container">
+  <div *ngIf="loading">loading...</div>
 
-<form>
-  <input type="text" name="search" id="search" [(ngModel)]="search">
-  <button type="button" (click)="getLoginAccount()" class="btn btn-primary">Search</button>
-</form>
+  <form class="text-center">
+    <input type="text" name="search" id="search" [(ngModel)]="search" (keydown.backspace)="onKeyBackspace($event)">
+    <button type="button" (click)="getLoginAccount()" class="btn btn-primary" [disabled]="search === ''">Search</button>
+  </form>
 
-<div *ngIf="errorMessage" class="alert alert-warning">
-  <strong>Warning!</strong> {{errorMessage | json}}
-</div> 
 
-<table class='table'>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>HTML Url</th>
-      <th>description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users;">
-      <td>{{user.id}}</td>
-      <td>{{user.name}}</td>
-      <td>{{user.html_url}}</td>
-      <td>{{user.description}}</td>
-    </tr>
-  </tbody>
-</table>
-
-<pre>{{users | json}}</pre>
+  <div class="row">
+    <div class="col-sm-4 animate__animated animate__fadeIn" [ngClass]="{'mx-auto': account.total_count === 1 }"
+      *ngFor="let user of users | paginate: { itemsPerPage: 9, currentPage: p }">
+      <div class="col mt-4">
+        <div class="card">
+          <img [src]="user.avatar_url" [alt]="user.login" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">{{user.login}}</h5>
+            <p class="card-text">{{user.type}}</p>
+            <a [href]="user.html_url" class="btn btn-primary" target="_blank">GitHub Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="account.total_count === 0" [ngClass]="{'d-none': alertMessage == false }" class="col-sm-6 mx-auto alert alert-danger animate__animated animate__fadeIn mt-4">
+      <strong>Warning!</strong> the user <em>{{search}}</em> does not exists
+    </div>
+    <pagination-controls *ngIf="account.total_count > 0" (pageChange)="p = $event" class="text-center mt-4"></pagination-controls>
+  </div>
+</div>

@@ -11,7 +11,6 @@ export class AccountService {
     constructor(private httpClient: HttpClient) {}
 
     public getAccount(account: string): Observable<any> {
-        console.log('account', account)
         this.url = `https://api.github.com/search/users?q=`;
         return this.httpClient.get(this.url + account);
     }

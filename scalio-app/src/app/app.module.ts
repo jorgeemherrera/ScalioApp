@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'  
 import { ReactiveFormsModule} from '@angular/forms' 
-
+import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { AccountService } from './services/account-service';
+
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { AccountService } from './services/account-service';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
+    NgxPaginationModule
   ],
   providers: [AccountService],
   bootstrap: [AppComponent]
