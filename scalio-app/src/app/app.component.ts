@@ -13,20 +13,29 @@ export class AppComponent {
   account;
   alertMessage: boolean;
   loading: boolean = false;
+  sortOrder: string = 'asc';
+  sortColumn: string = 'login';
 
   constructor(private accountService: AccountService) { }
-  
-  onKeyBackspace(event) {
-    console.log(event);
-    if (event.isTrusted) {
-      this.alertMessage = false;
-      console.log('this.alertMessage', this.alertMessage)
-    }
-  }
+
   getLoginAccount() {
     this.accountService.getAccount(this.search).subscribe(data => {
       this.account = data;
       this.users = data.items;
     })
+  }
+  SortData(col: string): void {
+    if (this.sortColumn == col) {
+      if (this.sortOrder == 'asc') this.sortOrder = 'desc';
+      else this.sortOrder = 'asc';
+    } else {
+      this.sortColumn = col;
+      this.sortOrder = 'asc';
+    }
+    this.users = this.users.sort((a, b) => {
+      if (a[col] < b[col]) return this.sortOrder == 'asc' ? -1 : 1;
+      if (a[col] > b[col]) return this.sortOrder == 'asc' ? 1 : -1;
+      return 0;
+    });
   }
 }
