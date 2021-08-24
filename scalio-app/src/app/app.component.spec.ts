@@ -1,9 +1,11 @@
 import { HttpClientModule } from '@angular/common/http';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AppComponent } from './app.component';
 import { AccountService } from './services/account-service';
+import * as Rx from 'rxjs';
+import { delay } from "rxjs/operators";
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -30,18 +32,30 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('scalio-app');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('scalio-app app is running!');
-  });
-
-  it('should set total_count by default in 0', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    let total_count = fixture.componentInstance.account = 0;
-    expect(total_count).toBe(0)
   })
+  it('should call getAccount and get response as empty array', fakeAsync(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const component = fixture.debugElement.componentInstance;
+    const accountService = fixture.debugElement.injector.get(AccountService);
+    spyOn(accountService, "getAccount").and.callFake(() => {
+      return Rx.of([]).pipe(delay(100));
+    });
+    component.getLoginAccount();
+    tick(100);
+    expect(component.account).toEqual([]);
+  }));
+
+  it('should show a sorted table', async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    console.log('fixture', fixture)
+    const compiled = fixture.debugElement.nativeElement;
+    const login = compiled.querySelectorAll('#login');
+    fixture.detectChanges();
+
+    login[0].click();
+    // after click on the first element, detect the changes to ensure sorting took place
+    fixture.detectChanges();
+    // your assertions, i.e. expect to see the first element being sorted in the table
+/*     expect(component.SortData) */
+}));
 });

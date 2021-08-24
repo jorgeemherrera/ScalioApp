@@ -24,7 +24,7 @@ describe('AccountService', () => {
     it('it is created', () => {
         expect(accountService).toBeTruthy();
     });
-    it('be able to retrieve posts from the API bia GET', () => {
+    it('should be able to retrieve posts from the API via GET', () => {
         const dummyPosts: Users[] = [{
             avatar: 'https://avatars.githubusercontent.com/u/19397980?v=4',
             login: 'test_1',
