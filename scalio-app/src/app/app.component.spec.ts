@@ -47,15 +47,11 @@ describe('AppComponent', () => {
 
   it('should show a sorted table', async(() => {
     const fixture = TestBed.createComponent(AppComponent);
-    console.log('fixture', fixture)
     const compiled = fixture.debugElement.nativeElement;
     const login = compiled.querySelectorAll('#login');
     fixture.detectChanges();
 
     login[0].click();
-    // after click on the first element, detect the changes to ensure sorting took place
     fixture.detectChanges();
-    // your assertions, i.e. expect to see the first element being sorted in the table
-/*     expect(component.SortData) */
-}));
+  }));
 });

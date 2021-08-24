@@ -20,7 +20,6 @@ export class AppComponent {
 
   getLoginAccount() {
     this.accountService.getAccount(this.search).subscribe(data => {
-      console.log('que es data', data)
       this.account = data;
       this.users = data.items;
     })
